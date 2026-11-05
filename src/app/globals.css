@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Blueprint palette */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  /* One typeface everywhere: Geist Mono (sans is aliased to it too). */
+  --font-sans: var(--font-geist-mono);
   --font-mono: var(--font-geist-mono);
+
+  --color-bp-bg: #1a1e24;      /* page: dark slate grey */
+  --color-bp-panel: #20262e;   /* cards / sheets */
+  --color-bp-raised: #29313b;  /* table header, tabs track, hovers */
+  --color-bp-field: #161a1f;   /* inputs */
+  --color-bp-line: #3a4a5c;    /* hairlines */
+  --color-bp-grid: #8fbfe8;    /* grid + corner marks (used with opacity) */
+  --color-bp-text: #dce7f2;
+  --color-bp-muted: #8b9cb1;
+  --color-bp-accent: #6cc4ff;  /* blueprint cyan */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: dark; /* dark native date pickers, selects, scrollbars */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bp-bg);
+  /* Drafting grid: minor lines every 24px, major every 120px. */
+  background-image:
+    linear-gradient(rgb(143 191 232 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(143 191 232 / 0.07) 1px, transparent 1px),
+    linear-gradient(rgb(143 191 232 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(143 191 232 / 0.03) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgb(108 196 255 / 0.3);
+}
+
+/* Corner registration marks on a panel. Element must be position: relative. */
+@utility bp-corners {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    --c: var(--color-bp-accent);
+    --l: 10px;
+    background:
+      linear-gradient(var(--c), var(--c)) top left / var(--l) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) top left / 1px var(--l) no-repeat,
+      linear-gradient(var(--c), var(--c)) top right / var(--l) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) top right / 1px var(--l) no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom left / var(--l) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom left / 1px var(--l) no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom right / var(--l) 1px no-repeat,
+      linear-gradient(var(--c), var(--c)) bottom right / 1px var(--l) no-repeat;
+    opacity: 0.7;
+  }
 }
